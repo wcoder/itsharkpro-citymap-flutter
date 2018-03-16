@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_citymap_flutter/pages/MyHomePage.dart';
+import 'package:mobile_citymap_flutter/pages/CitiesPage.dart';
 
 
 void main() => runApp(new MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
                 primarySwatch: Colors.blue,
             ),
             routes: {
-                '/': (BuildContext context) => new MyHomePage(title: 'City Map'),
+                '/': (BuildContext context) => new CitiesPage(title: 'City Map'),
             },
         );
     }

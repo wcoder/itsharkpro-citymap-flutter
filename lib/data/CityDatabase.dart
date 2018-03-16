@@ -13,14 +13,22 @@ class CityDatabase {
 
     Database db;
 
+    bool didInit = false;
+
     static CityDatabase get() {
         return _cityDatabase;
     }
 
     CityDatabase._internal();
 
+    /// Use this method to access the database, because initialization of the database (it has to go through the method channel)
+    Future<Database> _getDb() async{
+        if(!didInit) await _init();
+        return db;
+    }
 
-    Future init() async {
+
+    Future _init() async {
         // Get a location using path_provider
         Directory documentsDirectory = await getApplicationDocumentsDirectory();
         String path = join(documentsDirectory.path, "cities.db");
@@ -38,11 +46,12 @@ class CityDatabase {
                         ")");
             });
 
-
+        didInit = true;
     }
 
     /// Get a city by its id, if there is not entry for that ID, returns null.
     Future<City> getCity(String id) async{
+        var db = await _getDb();
         var result = await db.rawQuery('SELECT * FROM $tableName WHERE ${City.db_id} = "$id"');
         if(result.length == 0)return null;
         return new City.fromMap(result[0]);
@@ -51,6 +60,7 @@ class CityDatabase {
 
     /// Inserts or replaces the city.
     Future updateCity(City city) async {
+        var db = await _getDb();
         await db.inTransaction(() async {
             await db.rawInsert(
                 'INSERT OR REPLACE INTO '
@@ -59,7 +69,21 @@ class CityDatabase {
         });
     }
 
+    /// Get all cities with ids, will return a list with all the cities found
+    Future<List<City>> getCities(List<String> ids) async{
+        var db = await _getDb();
+        // Building SELECT * FROM TABLE WHERE ID IN (id1, id2, ..., idn)
+        var idsString = ids.map((it) => '"$it"').join(',');
+        var result = await db.rawQuery('SELECT * FROM $tableName WHERE ${City.db_id} IN ($idsString)');
+        var books = [];
+        for(Map<String, dynamic> item in result) {
+            books.add(new City.fromMap(item));
+        }
+        return books;
+    }
+
     Future close() async {
+        var db = await _getDb();
         return db.close();
     }
 
