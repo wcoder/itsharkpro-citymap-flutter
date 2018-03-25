@@ -11,6 +11,7 @@ dependencies:
   rxdart: 0.15.0
   sqflite: any
   path_provider: "^0.3.1"
+  cached_network_image: "^0.3.0"
 
 
 dev_dependencies:

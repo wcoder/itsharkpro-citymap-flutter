@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mobile_citymap_flutter/model/City.dart';
 import 'package:mobile_citymap_flutter/data/CityRepository.dart';
-import 'package:mobile_citymap_flutter/widgets/CityCard.dart';
 
 
 class CitiesPage extends StatefulWidget {
@@ -45,6 +45,34 @@ class _CitiesPageState extends State<CitiesPage> {
         });
     }
 
+    // Function to be called on click
+    void _onTileClicked(int index){
+        debugPrint("You tapped on item $index");
+
+//  Navigator.of(context).push(
+//                    new FadeRoute(
+//                        builder: (BuildContext context) => new BookNotesPage(bookState),
+//                        settings: new RouteSettings(name: '/notes', isInitialRoute: false),
+//                    ));
+    }
+
+    // Get grid tiles
+    List<Widget> _getTiles(List<City> citiesList) {
+        final List<Widget> tiles = <Widget>[];
+        for (int i = 0; i < citiesList.length; i++) {
+            tiles.add(new GridTile(
+                child: new InkResponse(
+                    enableFeedback: true,
+                    child: new CachedNetworkImage(
+                        imageUrl: citiesList[i].url,
+                        fit: BoxFit.cover,
+                    ),
+                    onTap: () => _onTileClicked(i),
+                )));
+        }
+        return tiles;
+    }
+
     @override
     void initState() {
         super.initState();
@@ -63,15 +91,19 @@ class _CitiesPageState extends State<CitiesPage> {
                 child: new Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                        _isLoading? new CircularProgressIndicator(): new Container(),
                         new Expanded(
-                            child: new ListView.builder(
-                                padding: new EdgeInsets.all(8.0),
-                                itemCount: _items.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                    return new CityCard(_items[index]);
-                                },
-                            ),
+                            child: _isLoading
+                                ? new Center(child: new CircularProgressIndicator())
+                                : _items.length == 0
+                                    ? new Center(child: new Text('No data!'))
+                                    : new GridView.count(
+                                        crossAxisCount: 3,
+                                        childAspectRatio: 1.0,
+                                        padding: const EdgeInsets.all(4.0),
+                                        mainAxisSpacing: 4.0,
+                                        crossAxisSpacing: 4.0,
+                                        children: _getTiles(_items),
+                                    ),
                         ),
                     ],
                 ),
