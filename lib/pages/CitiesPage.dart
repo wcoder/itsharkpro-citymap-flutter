@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mobile_citymap_flutter/model/City.dart';
 import 'package:mobile_citymap_flutter/data/CityRepository.dart';
+import 'package:mobile_citymap_flutter/pages/CityDetailsPage.dart';
+import 'package:mobile_citymap_flutter/utils/FadeRoute.dart';
 
 
 class CitiesPage extends StatefulWidget {
@@ -12,6 +14,7 @@ class CitiesPage extends StatefulWidget {
     @override
     _CitiesPageState createState() => new _CitiesPageState();
 }
+
 
 class _CitiesPageState extends State<CitiesPage> {
 
@@ -49,11 +52,11 @@ class _CitiesPageState extends State<CitiesPage> {
     void _onTileClicked(int index){
         debugPrint("You tapped on item $index");
 
-//  Navigator.of(context).push(
-//                    new FadeRoute(
-//                        builder: (BuildContext context) => new BookNotesPage(bookState),
-//                        settings: new RouteSettings(name: '/notes', isInitialRoute: false),
-//                    ));
+        Navigator.of(context).push(
+            new FadeRoute(
+                builder: (BuildContext context) => new CityDetailsPage(_items[index]),
+                settings: new RouteSettings(name: '/details', isInitialRoute: false),
+            ));
     }
 
     // Get grid tiles
