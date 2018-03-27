@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mobile_citymap_flutter/model/City.dart';
 import 'package:mobile_citymap_flutter/data/CityRepository.dart';
-import 'package:mobile_citymap_flutter/pages/CityDetailsPage.dart';
 import 'package:mobile_citymap_flutter/utils/FadeRoute.dart';
+import 'package:mobile_citymap_flutter/pages/CityDetailsPage.dart';
+import 'package:mobile_citymap_flutter/pages/CityMapPage.dart';
 
 
 class CitiesPage extends StatefulWidget {
@@ -48,10 +49,16 @@ class _CitiesPageState extends State<CitiesPage> {
         });
     }
 
-    // Function to be called on click
-    void _onTileClicked(int index){
-        debugPrint("You tapped on item $index");
 
+    void _onMapBtnClicked() {
+        Navigator.of(context).push(
+            new FadeRoute(
+                builder: (BuildContext context) => new CityMapPage(_items),
+                settings: new RouteSettings(name: '/map', isInitialRoute: false),
+            ));
+    }
+
+    void _onTileClicked(int index) {
         Navigator.of(context).push(
             new FadeRoute(
                 builder: (BuildContext context) => new CityDetailsPage(_items[index]),
@@ -59,7 +66,6 @@ class _CitiesPageState extends State<CitiesPage> {
             ));
     }
 
-    // Get grid tiles
     List<Widget> _getTiles(List<City> citiesList) {
         final List<Widget> tiles = <Widget>[];
         for (int i = 0; i < citiesList.length; i++) {
@@ -89,6 +95,13 @@ class _CitiesPageState extends State<CitiesPage> {
             key: scaffoldKey,
             appBar: new AppBar(
                 title: new Text(widget.title),
+                actions: <Widget>[
+                    new IconButton(
+                        icon: new Icon(Icons.map),
+                        tooltip: 'Map',
+                        onPressed: _onMapBtnClicked,
+                    ),
+                ],
             ),
             body: new Center(
                 child: new Column(
