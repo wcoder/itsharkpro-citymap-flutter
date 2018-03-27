@@ -91,7 +91,7 @@ class _CitiesPageState extends State<CitiesPage> {
     Widget _getGridView() {
         return new GridView.count(
             crossAxisCount: 3,
-            childAspectRatio: 1.0,
+            childAspectRatio: 0.7,
             padding: const EdgeInsets.all(4.0),
             mainAxisSpacing: 4.0,
             crossAxisSpacing: 4.0,
