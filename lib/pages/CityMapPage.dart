@@ -16,25 +16,21 @@ class CityMapPage extends StatefulWidget  {
 
 class _CityMapPageState extends State<CityMapPage> {
 
-    Marker _getMarker(City city) {
+    Marker _buildCityMarker(City city) {
         return new Marker(
             width: 30.0,
             height: 30.0,
             point: new LatLng(
-                double.parse(city.latitude),
-                double.parse(city.longitude)),
+            double.parse(city.latitude),
+            double.parse(city.longitude)),
             builder: (ctx) => new Container(
                 child: new Icon(Icons.room, color: Colors.red,)
             ),
         );
     }
 
-    List<Marker> _getMarkers() {
-        final List<Marker> markers = <Marker>[];
-        for (int i = 0; i < widget.cities.length; i++) {
-            markers.add(_getMarker(widget.cities[i]));
-        }
-        return markers;
+    List<Marker> _buildCitiesMarkers() {
+        return widget.cities.map(_buildCityMarker).toList();
     }
 
     Widget _getMap() {
@@ -47,7 +43,7 @@ class _CityMapPageState extends State<CityMapPage> {
                     urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                     subdomains: ['a', 'b', 'c']
                 ),
-                new MarkerLayerOptions(markers: _getMarkers()),
+                new MarkerLayerOptions(markers: _buildCitiesMarkers()),
             ],
         );
     }

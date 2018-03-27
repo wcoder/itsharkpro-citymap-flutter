@@ -18,9 +18,9 @@ class CitiesPage extends StatefulWidget {
 
 class _CitiesPageState extends State<CitiesPage> {
 
-    final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey();
+    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
 
-    List<City> _items = <City>[];
+    List<City> _cities = <City>[];
 
     bool _isLoading = false;
 
@@ -28,7 +28,7 @@ class _CitiesPageState extends State<CitiesPage> {
     void _loadData() {
         setState(() {
             _isLoading = true;
-            _items.clear();
+            _cities.clear();
         });
 
         CityRepository.get()
@@ -37,9 +37,9 @@ class _CitiesPageState extends State<CitiesPage> {
                 setState(() {
                     _isLoading = false;
                     if (cities.isOk()) {
-                        _items = cities.body;
+                        _cities = cities.body;
                     } else {
-                        scaffoldKey.currentState.showSnackBar(new SnackBar(
+                        _scaffoldKey.currentState.showSnackBar(new SnackBar(
                             content: new Text("Something went wrong, check your internet connection")));
                     }
                 });
@@ -49,20 +49,20 @@ class _CitiesPageState extends State<CitiesPage> {
     void _onMapBtnClicked() {
         Navigator.of(context).push(
             new FadeRoute(
-                builder: (BuildContext context) => new CityMapPage(_items),
+                builder: (BuildContext context) => new CityMapPage(_cities),
                 settings: new RouteSettings(isInitialRoute: false),
             ));
     }
 
-    void _onTileClicked(int index) {
+    void _onTileClicked(City city) {
         Navigator.of(context).push(
             new FadeRoute(
-                builder: (BuildContext context) => new CityDetailsPage(_items[index]),
+                builder: (BuildContext context) => new CityDetailsPage(city),
                 settings: new RouteSettings(isInitialRoute: false),
             ));
     }
 
-    Widget _getTile(City city, int index) {
+    Widget _buildTile(City city) {
         return new GridTile(
             child: new InkResponse(
                 enableFeedback: true,
@@ -73,16 +73,12 @@ class _CitiesPageState extends State<CitiesPage> {
                     ),
                     tag: city.id
                 ),
-                onTap: () => _onTileClicked(index),
+                onTap: () => _onTileClicked(city),
             ));
     }
 
-    List<Widget> _getTiles() {
-        final List<Widget> tiles = <Widget>[];
-        for (int i = 0; i < _items.length; i++) {
-            tiles.add(_getTile(_items[i], i));
-        }
-        return tiles;
+    List<Widget> _buildTiles() {
+        return _cities.map(_buildTile).toList();
     }
 
     Widget _getGridView() {
@@ -92,7 +88,7 @@ class _CitiesPageState extends State<CitiesPage> {
             padding: const EdgeInsets.all(4.0),
             mainAxisSpacing: 4.0,
             crossAxisSpacing: 4.0,
-            children: _getTiles(),
+            children: _buildTiles(),
         );
     }
 
@@ -115,14 +111,14 @@ class _CitiesPageState extends State<CitiesPage> {
     @override
     Widget build(BuildContext context) {
         return new Scaffold(
-            key: scaffoldKey,
+            key: _scaffoldKey,
             appBar: new AppBar(
                 title: new Text(widget.title),
                 actions: <Widget>[_getMapBtn()],
             ),
             body: _isLoading
                 ? new Center(child: new CircularProgressIndicator())
-                : _items.length == 0
+                : _cities.length == 0
                     ? new Center(child: new Text('No data 😢'))
                     : _getGridView(),
         );

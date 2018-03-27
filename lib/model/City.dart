@@ -8,7 +8,12 @@ class City {
     static final db_longitude = "longitude";
     static final db_url = "url";
 
-    String id, title, description, latitude, longitude, url;
+    final String id;
+    final String title;
+    final String description;
+    final String latitude;
+    final String longitude;
+    final String url;
 
     City({
         @required this.id,
