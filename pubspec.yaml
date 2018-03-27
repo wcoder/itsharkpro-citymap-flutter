@@ -12,6 +12,7 @@ dependencies:
   sqflite: any
   path_provider: "^0.3.1"
   cached_network_image: "^0.3.0"
+  flutter_map: ^0.0.1
 
 
 dev_dependencies:
