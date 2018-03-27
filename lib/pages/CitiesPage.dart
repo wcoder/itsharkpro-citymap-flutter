@@ -64,8 +64,8 @@ class _CitiesPageState extends State<CitiesPage> {
 
     Widget _buildTile(City city) {
         return new GridTile(
-            child: new InkResponse(
-                enableFeedback: true,
+            child: new GestureDetector(
+                onTap: () => _onTileClicked(city),
                 child: new Hero(
                     child: new CachedNetworkImage(
                         imageUrl: city.url,
@@ -73,8 +73,15 @@ class _CitiesPageState extends State<CitiesPage> {
                     ),
                     tag: city.id
                 ),
+            ),
+            footer: new GestureDetector(
                 onTap: () => _onTileClicked(city),
-            ));
+                child: new GridTileBar(
+                    backgroundColor: Colors.black45,
+                    title: new Text(city.title, textAlign: TextAlign.center),
+                ),
+            ),
+        );
     }
 
     List<Widget> _buildTiles() {
@@ -114,7 +121,7 @@ class _CitiesPageState extends State<CitiesPage> {
             key: _scaffoldKey,
             appBar: new AppBar(
                 title: new Text(widget.title),
-                actions: <Widget>[_getMapBtn()],
+                actions: [_getMapBtn()],
             ),
             body: _isLoading
                 ? new Center(child: new CircularProgressIndicator())

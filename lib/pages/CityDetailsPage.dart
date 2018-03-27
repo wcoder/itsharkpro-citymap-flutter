@@ -44,7 +44,7 @@ class _CityDetailsPageState extends State<CityDetailsPage> {
             ),
             body: new SingleChildScrollView(
                 child: new Column(
-                    children: <Widget>[
+                    children: [
                         _getImage(),
                         _getDescription(),
                     ],
