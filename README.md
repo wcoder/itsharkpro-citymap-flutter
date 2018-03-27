@@ -4,6 +4,8 @@
 Implemented on [Flutter](https://flutter.io/).
 For help getting started with Flutter, view online [documentation](https://flutter.io/).
 
+![Preview of main page on Android and iOS platforms](art/both_main.png)
+
 ## Details
 
 **City Map** - simple mobile application for show information about some cities.
