@@ -1,5 +1,7 @@
 # City Map - Android & iOS application (Dart)
 
+IT Shark Meetup #2 - Flutter.io - [Slides](https://docs.google.com/presentation/d/1XGNgpJgDhLujBMqApyICdOdLMbDjvN6n-HLfznH40iQ/edit?usp=sharing)
+
 ## Flutter
 Implemented on [Flutter](https://flutter.io/).
 For help getting started with Flutter, view online [documentation](https://flutter.io/).
